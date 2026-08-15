@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use App\Http\Requests\StoreStockMovementRequest;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -95,5 +97,49 @@ class ProductController extends Controller
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Product deleted successfully.']);
 
         return redirect()->route('product.index');
+    }
+
+    public function stockMovement(Product $product)
+    {
+        return Inertia::render('product/stock-movement', [
+            'data' => $product,
+        ]);
+    }
+
+    /**
+     * Adjust the stock of the specified product.
+     */
+    public function storeStockMovement(StoreStockMovementRequest $request, Product $product)
+    {
+        $data = $request->validated();
+
+        if ($data['movement_type'] === 'out' && $product->stock_quantity < $data['quantity']) {
+            Inertia::flash('toast', ['type' => 'error', 'message' => 'Insufficient stock for this operation.']);
+            return redirect()->back();
+        }
+
+        DB::transaction(function () use ($data, $product) {
+            match ($data['movement_type']) {
+                'in' => $product->increment('stock_quantity', $data['quantity']),
+                'out' => $product->decrement('stock_quantity', $data['quantity']),
+                'adjustment' => $product->update(['stock_quantity' => $data['quantity']]),
+            };
+
+            $product->stockMovements()->create([
+                'movement_type' => $data['movement_type'],
+                'quantity' => $data['quantity'],
+                'notes' => $data['notes'] ?? null,
+                'reference_type' => 'manual',
+            ]);
+        });
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Product stock adjusted successfully.']);
+
+        return redirect()->route('product.index');
+    }
+
+    public function notifTrigger()
+    {
+        // API Call
     }
 }

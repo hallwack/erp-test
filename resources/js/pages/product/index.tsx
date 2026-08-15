@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import productRoutes from '@/routes/product';
 import { Product } from '@/types/models';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { Edit, Plus, Trash } from 'lucide-react';
+import { Edit, Plus, Trash, Warehouse } from 'lucide-react';
 
 type PageProps = {
     data: Product[];
@@ -36,6 +36,21 @@ export default function ProductIndex() {
                                     className="flex items-center gap-4 rounded-lg bg-muted/30 p-4 hover:bg-muted/50"
                                 >
                                     <p className="flex-1">{product.name}</p>
+                                    <Button
+                                        asChild
+                                        variant="secondary"
+                                        size="icon"
+                                    >
+                                        <Link
+                                            href={
+                                                productRoutes.stockMovement(
+                                                    product.id,
+                                                ).url
+                                            }
+                                        >
+                                            <Warehouse className="size-4" />
+                                        </Link>
+                                    </Button>
                                     <Button
                                         asChild
                                         variant="outline"
