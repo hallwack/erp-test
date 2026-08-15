@@ -15,5 +15,8 @@ use Illuminate\Support\Carbon;
 #[Fillable(['name'])]
 class Category extends Model
 {
-    //
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

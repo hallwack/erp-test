@@ -26,4 +26,14 @@ class Product extends Model
         'price' => 'float',
         'cost_price' => 'float',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function stockMovements()
+    {
+        return $this->hasMany(StockMovement::class);
+    }
 }
