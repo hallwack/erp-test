@@ -42,11 +42,11 @@ class ProductController extends Controller
         $data = collect($request->validated())
             ->reject(fn ($value) => is_null($value))
             ->toArray();
-        $product = Product::create($data);
+        Product::create($data);
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Product created successfully.']);
 
-        return redirect()->route('product.index', $product);
+        return redirect()->route('product.index');
     }
 
     /**
@@ -82,7 +82,7 @@ class ProductController extends Controller
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Product updated successfully.']);
 
-        return redirect()->route('product.index', $product);
+        return redirect()->route('product.index');
     }
 
     /**
@@ -94,6 +94,6 @@ class ProductController extends Controller
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Product deleted successfully.']);
 
-        return redirect()->route('product.index', $product);
+        return redirect()->route('product.index');
     }
 }

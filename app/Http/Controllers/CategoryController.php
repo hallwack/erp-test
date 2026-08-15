@@ -34,11 +34,11 @@ class CategoryController extends Controller
      */
     public function store(CategoryStoreRequest $request)
     {
-        $category = Category::create($request->validated());
+        Category::create($request->validated());
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Category created successfully.']);
 
-        return redirect()->route('category.index', $category);
+        return redirect()->route('category.index');
     }
 
     /**
@@ -60,7 +60,7 @@ class CategoryController extends Controller
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Category updated successfully.']);
 
-        return redirect()->route('category.index', $category);
+        return redirect()->route('category.index');
     }
 
     /**
@@ -72,6 +72,6 @@ class CategoryController extends Controller
 
         Inertia::flash('toast', ['type' => 'success', 'message' => 'Category deleted successfully.']);
 
-        return redirect()->route('category.index', $category);
+        return redirect()->route('category.index');
     }
 }
