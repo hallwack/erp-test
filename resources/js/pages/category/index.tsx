@@ -11,7 +11,6 @@ type PageProps = {
 export default function CategoryIndex() {
     const { data } = usePage<PageProps>().props;
 
-    console.log('data', data);
     return (
         <>
             <Head title="Category" />

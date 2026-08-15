@@ -4,7 +4,7 @@ import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import category from '@/routes/category';
+import categoryRoutes from '@/routes/category';
 import { Category } from '@/types/models';
 import { Form, Head, usePage } from '@inertiajs/react';
 
@@ -15,12 +15,13 @@ type PageProps = {
 export default function CategoryForm() {
     const { data } = usePage<PageProps>().props;
 
-    console.log('data', data);
     return (
         <>
-            <Head title="Create Category" />
+            <Head title={data ? 'Edit Category' : 'Create Category'} />
             <div className="px-4 py-6">
-                <h1 className="sr-only">Create Category</h1>
+                <h1 className="sr-only">
+                    {data ? 'Edit Category' : 'Create Category'}
+                </h1>
 
                 <Heading title={data ? 'Edit Category' : 'Create Category'} />
                 <Form
@@ -64,7 +65,11 @@ CategoryForm.layout = {
     breadcrumbs: [
         {
             title: 'Category',
-            href: category.index(),
+            href: categoryRoutes.index(),
+        },
+        {
+            title: 'Form',
+            href: categoryRoutes.index(),
         },
     ],
 };
