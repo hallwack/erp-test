@@ -15,11 +15,20 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
+import category from '@/routes/category';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
+        icon: LayoutGrid,
+    },
+];
+
+const inventoryNavItems: NavItem[] = [
+    {
+        title: 'Category',
+        href: category.index(),
         icon: LayoutGrid,
     },
 ];
@@ -54,6 +63,7 @@ export function AppSidebar() {
 
             <SidebarContent>
                 <NavMain items={mainNavItems} />
+                <NavMain items={inventoryNavItems} label="Inventory" />
             </SidebarContent>
 
             <SidebarFooter>
