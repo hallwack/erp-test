@@ -20,7 +20,6 @@ type PageProps = {
 export default function ProductForm() {
     const { data, categories } = usePage<PageProps>().props;
 
-    console.log('ProductForm category:', categories);
     return (
         <>
             <Head title={data ? 'Edit Product' : 'Create Product'} />
