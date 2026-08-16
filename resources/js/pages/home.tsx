@@ -13,9 +13,7 @@ type PageProps = {
 };
 
 export default function Home() {
-    const { auth, products, cart_count, ...props } = usePage<PageProps>().props;
-
-    console.log('Props', props);
+    const { auth, products } = usePage<PageProps>().props;
 
     return (
         <div className="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:p-8 dark:bg-[#0a0a0a]">
