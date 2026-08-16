@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import InputError from '@/components/input-error';
 import checkout from '@/routes/checkout';
+import { formatIDR } from '@/lib/utils';
 
 export default function CheckoutIndex() {
     const { cart, cart_total } = usePage<any>().props;
@@ -87,7 +88,9 @@ export default function CheckoutIndex() {
                                             {item.quantity}x {item.name}
                                         </span>
                                         <span>
-                                            Rp. {item.quantity * item.price}
+                                            {formatIDR(
+                                                item.quantity * item.price,
+                                            )}
                                         </span>
                                     </div>
                                 ))}
@@ -95,7 +98,7 @@ export default function CheckoutIndex() {
 
                             <div className="flex justify-between border-t pt-4 font-bold">
                                 <span>Total</span>
-                                <span>Rp. {cart_total}</span>
+                                <span>{formatIDR(cart_total)}</span>
                             </div>
                         </CardContent>
                         <CardContent>

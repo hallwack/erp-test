@@ -3,6 +3,7 @@ import { Button } from './ui/button';
 import { Card, CardContent, CardFooter } from './ui/card';
 import cartRoutes from '@/routes/cart';
 import { toast } from 'sonner';
+import { formatIDR } from '@/lib/utils';
 
 export default function CardProduct({
     id,
@@ -39,7 +40,7 @@ export default function CardProduct({
 
                     <div className="flex items-center gap-2 pt-1">
                         <span className="text-base font-bold text-foreground">
-                            {price}
+                            {formatIDR(parseFloat(price))}
                         </span>
                     </div>
                 </CardContent>

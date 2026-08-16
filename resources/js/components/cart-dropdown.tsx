@@ -13,6 +13,7 @@ import {
 import { Cart } from '@/types/models';
 import cartRoutes from '@/routes/cart';
 import checkoutRoutes from '@/routes/checkout';
+import { formatIDR } from '@/lib/utils';
 
 type PageProps = {
     cart_count: number;
@@ -71,13 +72,16 @@ export default function CartDropdown() {
                                             {item.name}
                                         </span>
                                         <span className="text-xs text-muted-foreground">
-                                            {item.quantity} x Rp. {item.price}
+                                            {item.quantity} x{' '}
+                                            {formatIDR(item.price)}
                                         </span>
                                     </div>
 
                                     <div className="flex items-center gap-3">
                                         <span className="text-sm font-bold">
-                                            Rp. {item.quantity * item.price}
+                                            {formatIDR(
+                                                item.quantity * item.price,
+                                            )}
                                         </span>
                                         <Button
                                             variant="ghost"
@@ -98,7 +102,7 @@ export default function CartDropdown() {
 
                         <div className="flex items-center justify-between p-3 font-bold">
                             <span>Total:</span>
-                            <span>Rp {cart_total}</span>
+                            <span>{formatIDR(cart_total)}</span>
                         </div>
                         <div className="p-2">
                             <Button asChild className="w-full">
