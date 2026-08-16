@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import {
+    BadgeDollarSign,
     BookOpen,
     FolderGit2,
     LayoutGrid,
@@ -23,6 +24,7 @@ import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 import categoryRoutes from '@/routes/category';
 import productRoutes from '@/routes/product';
+import orderRoutes from '@/routes/order';
 
 const mainNavItems: NavItem[] = [
     {
@@ -42,6 +44,14 @@ const inventoryNavItems: NavItem[] = [
         title: 'Product',
         href: productRoutes.index(),
         icon: Package,
+    },
+];
+
+const financeNavItems: NavItem[] = [
+    {
+        title: 'Order',
+        href: orderRoutes.index(),
+        icon: BadgeDollarSign,
     },
 ];
 
@@ -76,6 +86,7 @@ export function AppSidebar() {
             <SidebarContent>
                 <NavMain items={mainNavItems} />
                 <NavMain items={inventoryNavItems} label="Inventory" />
+                <NavMain items={financeNavItems} label="Finance" />
             </SidebarContent>
 
             <SidebarFooter>
