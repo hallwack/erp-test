@@ -39,8 +39,12 @@ type OrderData = {
     } | null;
 };
 
+type PageProps = {
+    order: OrderData;
+};
+
 export default function OrderShow() {
-    const { order } = usePage<{ order: OrderData }>().props;
+    const { order } = usePage<PageProps>().props;
 
     const getBadgeColor = (status: string) => {
         switch (status) {
