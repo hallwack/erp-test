@@ -20,6 +20,10 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable(['order_id', 'gateway_transaction_id', 'payment_type', 'amount', 'status', 'raw_response', 'paid_at'])]
 class Payment extends Model
 {
+    protected $casts = [
+        'paid_at' => 'datetime',
+    ];
+
     public function order()
     {
         return $this->belongsTo(Order::class);
