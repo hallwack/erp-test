@@ -33,15 +33,96 @@ docker stop n8n
 docker start n8n
 ```
 
-## Membuat workflow stok rendah
+## Integrasi Telegram dengan workflow JSON
 
-1. Buat workflow baru.
-2. Tambahkan node **Webhook** dengan method `POST` dan path `notif-trigger`.
-3. Tambahkan node **Telegram** dengan operasi **Send Message**.
-4. Buat credential Telegram menggunakan token dari BotFather dan isi Chat ID tujuan.
-5. Hubungkan Webhook ke Telegram, lalu aktifkan workflow.
+Workflow JSON dapat di-import ke n8n, tetapi credential Telegram biasanya harus dibuat atau dipilih ulang di instance n8n tujuan. Ikuti urutan berikut.
 
-Aplikasi memanggil URL production webhook:
+### 1. Buat bot Telegram melalui BotFather
+
+1. Buka Telegram dan cari akun resmi [@BotFather](https://t.me/BotFather).
+2. Kirim perintah `/newbot`.
+3. Masukkan nama tampilan bot.
+4. Masukkan username bot yang unik dan diakhiri `bot`, misalnya `mini_erp_alert_bot`.
+5. BotFather akan memberikan **HTTP API token**. Simpan token tersebut secara rahasia.
+
+Token ini memberikan akses untuk mengendalikan bot. Jangan menaruhnya di file workflow JSON yang dibagikan atau di repository.
+
+### 2. Hubungkan token ke credential Telegram di n8n
+
+1. Import workflow JSON ke n8n melalui menu **Workflows → Import from File** atau opsi import JSON.
+2. Buka node **Telegram** yang digunakan untuk mengirim pesan.
+3. Pada bagian **Credential to connect with**, pilih **Create New Credential** atau credential Telegram yang sudah ada.
+4. Masukkan token dari BotFather pada field **Access Token**.
+5. Simpan credential dan gunakan tombol **Test** atau **Save** untuk memverifikasi koneksi.
+
+Jika workflow memiliki lebih dari satu node Telegram, pilih credential yang sama pada setiap node tersebut. Import workflow tidak otomatis memberikan credential karena credential dikelola secara terpisah oleh n8n.
+
+### 3. Mulai percakapan dengan bot
+
+Bot Telegram tidak dapat memulai percakapan dengan user. Buka username bot yang dibuat, tekan **Start**, atau kirim pesan:
+
+```text
+/start
+```
+
+Langkah ini wajib dilakukan sebelum bot dapat mengirim notifikasi ke chat pribadi Anda.
+
+### 4. Dapatkan Chat ID user
+
+Metode yang paling langsung adalah memakai Telegram Bot API:
+
+1. Kirim pesan apa saja, misalnya `test`, ke bot yang baru dibuat.
+2. Buka URL berikut di browser. Ganti `<TOKEN_BOT>` dengan token dari BotFather:
+
+   ```text
+   https://api.telegram.org/bot<TOKEN_BOT>/getUpdates
+   ```
+
+3. Cari object `message` lalu field `chat` → `id`. Contoh struktur respons:
+
+   ```json
+   {
+     "message": {
+       "chat": {
+         "id": 123456789,
+         "type": "private"
+       },
+       "text": "test"
+     }
+   }
+   ```
+
+4. Nilai `123456789` adalah **Chat ID** user. Salin angka tersebut ke node Telegram di n8n.
+
+Alternatifnya, Anda dapat menggunakan bot pencari ID seperti `@userinfobot`, tetapi tetap pastikan user sudah menekan **Start** pada bot milik Anda.
+
+> **Catatan:** Jika `getUpdates` mengembalikan `result: []`, kirim pesan baru ke bot lalu refresh URL. Jika bot sedang memakai webhook Telegram/Telegram Trigger, `getUpdates` dapat tidak mengembalikan update; nonaktifkan webhook sementara atau gunakan node Telegram Trigger untuk membaca data chat.
+
+### 5. Atur node Telegram
+
+Pada node **Telegram** yang memiliki operasi **Send Message**:
+
+- **Credential:** credential Telegram yang berisi token BotFather.
+- **Chat ID:** angka Chat ID user, misalnya `123456789`.
+- **Text/Message:** gunakan payload dari webhook, misalnya `{{$json.message}}`.
+
+Jika node memakai field yang berbeda, gunakan data yang tersedia dari node Webhook. Payload dari aplikasi Mini ERP memiliki field `message`, `product_name`, `current_stock`, dan `threshold`.
+
+### 6. Uji workflow
+
+1. Pastikan node Webhook dan node Telegram terhubung.
+2. Jalankan workflow dalam mode test jika memakai URL `webhook-test`, atau aktifkan workflow untuk URL production `webhook`.
+3. Kirim request contoh ke webhook n8n:
+
+   ```bash
+   curl -X POST http://localhost:5678/webhook-test/notif-trigger \
+     -H 'Content-Type: application/json' \
+     -d '{"message":"Test notifikasi stok rendah","product_name":"Produk Test","current_stock":2,"threshold":5}'
+   ```
+
+4. Pastikan pesan diterima di chat Telegram Anda.
+
+Setelah pengujian berhasil, aktifkan workflow dan gunakan URL production:
 
 ```text
 http://localhost:5678/webhook/notif-trigger
@@ -75,4 +156,3 @@ Di node Telegram, gunakan field `message`, misalnya `{{$json.message}}`.
 - Jika webhook tidak masuk, cek `docker logs -f n8n` dan pastikan `N8N_URL` tidak memiliki path webhook tambahan.
 
 Referensi: [n8n Docker installation](https://docs.n8n.io/hosting/installation/docker/).
-
