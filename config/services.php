@@ -41,4 +41,7 @@ return [
         'webhook_token' => env('XENDIT_WEBHOOK_TOKEN'),
     ],
 
+    'n8n' => [
+        'url' => env('N8N_URL', 'http://localhost:5678'),
+    ],
 ];

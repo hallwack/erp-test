@@ -189,14 +189,18 @@ class PaymentCallbackController extends Controller
 
     private function triggerLowStockAlert(Product $product, int $currentStock, int $threshold)
     {
-        $webhookUrl = config('services.n8n.low_stock_webhook');
+        $n8nUrl = config('services.n8n.url');
+        // $testWebhookUrl = $n8nUrl.'/webhook-test/notif-trigger';
+        $prodWebhookUrl = $n8nUrl.'/webhook/notif-trigger'; // Use this when the n8n in publish mode
 
-        if ($webhookUrl) {
-            Http::post($webhookUrl, [
+        if ($n8nUrl) {
+            Http::post($prodWebhookUrl, [
                 'product_id' => $product->id,
                 'product_name' => $product->name,
                 'current_stock' => $currentStock,
                 'threshold' => $threshold,
+                'status' => 'WARNING',
+                'message' => 'Stock for product '.$product->name.' is below threshold. Current stock: '.$currentStock,
             ]);
         }
     }
