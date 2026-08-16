@@ -1,0 +1,102 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const status = $input.first().json.body.status\nconst message = $input.first().json.body.message\n\nreturn {\n  status,\n  message\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        -224
+      ],
+      "id": "259acb62-a876-4290-8e48-b87706132a98",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "notif-trigger",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -48,
+        -224
+      ],
+      "id": "e0eb6eb6-92f3-4c05-baf8-7b9c038f45ea",
+      "name": "Webhook1",
+      "webhookId": "0a9197ba-a2e4-4a00-992a-a441f6562940"
+    },
+    {
+      "parameters": {
+        "chatId": "907499327",
+        "text": "={{ $json.status }}! {{ $json.message }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        448,
+        -224
+      ],
+      "id": "18dd139c-3673-45e6-bb79-7cd7ec353ae0",
+      "name": "Send a text message",
+      "webhookId": "5f19b41e-1718-415a-86db-0bb35f30c40b",
+      "credentials": {
+        "telegramApi": {
+          "id": "9Nafy0wo9wytfSZo",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "b06cc25d-90f0-41ba-9fb2-8b484f88d46e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ff54443e59182fdaf2860f7d0ff6c6f27cde403d11c843d521571db22b28831d"
+  },
+  "nodeGroups": [],
+  "id": "hxkY7Eg21fnYY5HP",
+  "tags": []
+}
