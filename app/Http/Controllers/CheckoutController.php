@@ -64,7 +64,6 @@ class CheckoutController extends Controller
             });
 
             session()->forget('cart');
-            Inertia::flash('toast', ['type' => 'success', 'message' => 'Order created! Redirecting to payment...']);
 
             return Inertia::location($paymentUrl);
         } catch (\Exception $e) {
