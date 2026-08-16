@@ -410,3 +410,11 @@ Jika callback atau notifikasi tidak masuk, periksa `storage/logs/laravel.log`, e
 - Jangan commit `.env`, secret key Xendit, callback token, atau credential Telegram.
 - Gunakan Xendit mode development/test saat pengembangan.
 - URL ngrok gratis dapat berubah setiap kali tunnel dimulai; perbarui webhook Xendit jika URL berubah.
+
+# Informasi Submission
+
+- Nama: Raihan Adam
+- Posisi: Fullstack Developer
+- Repository: https://github.com/hallwack/erp-test
+- Video Demo: https://drive.google.com/file/d/1Fh4sZgsr3W_ZM450_Orz5OkiCVSGtX9q/view?usp=drive_link
+- Payment Gateway: Xendit Sandbox
