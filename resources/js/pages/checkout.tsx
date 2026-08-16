@@ -4,10 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-    NativeSelect,
-    NativeSelectOption,
-} from '@/components/ui/native-select';
 import InputError from '@/components/input-error';
 import checkout from '@/routes/checkout';
 
@@ -16,7 +12,6 @@ export default function CheckoutIndex() {
 
     const { data, setData, processing, errors, submit } = useForm({
         customer_name: '',
-        payment_method: 'qris',
     });
 
     const onSubmitCart = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -72,33 +67,6 @@ export default function CheckoutIndex() {
                                 />
                                 <InputError message={errors.customer_name} />
                             </div>
-
-                            <div className="grid gap-2">
-                                <Label htmlFor="payment_method">
-                                    Payment Method
-                                </Label>
-                                <NativeSelect
-                                    id="payment_method"
-                                    value={data.payment_method}
-                                    onChange={(e) =>
-                                        setData(
-                                            'payment_method',
-                                            e.target.value,
-                                        )
-                                    }
-                                >
-                                    <NativeSelectOption value="qris">
-                                        QRIS
-                                    </NativeSelectOption>
-                                    <NativeSelectOption value="bank_transfer">
-                                        Bank Transfer
-                                    </NativeSelectOption>
-                                    <NativeSelectOption value="cash">
-                                        Cash
-                                    </NativeSelectOption>
-                                </NativeSelect>
-                                <InputError message={errors.payment_method} />
-                            </div>
                         </CardContent>
                     </Card>
                 </div>
@@ -119,15 +87,15 @@ export default function CheckoutIndex() {
                                             {item.quantity}x {item.name}
                                         </span>
                                         <span>
-                                            Rp {item.quantity * item.price}
+                                            Rp. {item.quantity * item.price}
                                         </span>
                                     </div>
                                 ))}
                             </div>
 
                             <div className="flex justify-between border-t pt-4 font-bold">
-                                <span>Total to Pay</span>
-                                <span>Rp {cart_total}</span>
+                                <span>Total</span>
+                                <span>Rp. {cart_total}</span>
                             </div>
                         </CardContent>
                         <CardContent>
