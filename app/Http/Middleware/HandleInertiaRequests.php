@@ -35,6 +35,8 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $cart = session('cart', []);
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -42,6 +44,11 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+
+            // Cart
+            'cart' => array_values($cart),
+            'cart_count' => collect($cart)->sum('quantity'),
+            'cart_total' => collect($cart)->sum(fn ($item) => $item['price'] * $item['quantity']),
         ];
     }
 }
