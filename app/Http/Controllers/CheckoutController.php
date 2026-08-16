@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CheckoutStoreRequest;
 use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -137,8 +138,8 @@ class CheckoutController extends Controller
             'description' => 'Payment for Order #'.$order->order_number,
             'items' => $xenditItems,
 
-            // 'success_return_url' => config('app.url') . '/checkout/status?order_id=' . $order->order_number,
-            // 'cancel_return_url'  => config('app.url') . '/checkout/status?order_id=' . $order->order_number,
+            'success_return_url' => config('app.url') . '/checkout/status?order_id=' . $order->order_number,
+            'cancel_return_url'  => config('app.url') . '/checkout/status?order_id=' . $order->order_number,
         ];
 
         $response = Http::withBasicAuth($this->secretKey, '')
@@ -162,5 +163,27 @@ class CheckoutController extends Controller
         ]);
 
         return $response['payment_link_url'];
+    }
+
+    public function status(Request $request)
+    {
+        $orderNumber = $request->query('order_id');
+
+        if (! $orderNumber) {
+            return redirect()->route('home');
+        }
+
+        $order = Order::where('order_number', $orderNumber)->firstOrFail();
+
+        return Inertia::render('checkout-status', [
+            'order' => [
+                'order_number' => $order->order_number,
+                'customer_name' => $order->customer_name,
+                'total' => $order->total,
+                'status' => $order->status,
+                'payment_status' => $order->payment_status,
+            ],
+        ]);
+
     }
 }
