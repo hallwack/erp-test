@@ -25,6 +25,7 @@ import type { NavItem } from '@/types';
 import categoryRoutes from '@/routes/category';
 import productRoutes from '@/routes/product';
 import orderRoutes from '@/routes/order';
+import stockMovementRoutes from '@/routes/stock-movement';
 
 const mainNavItems: NavItem[] = [
     {
@@ -53,6 +54,11 @@ const financeNavItems: NavItem[] = [
         href: orderRoutes.index(),
         icon: BadgeDollarSign,
     },
+    {
+        title: 'Stock Movement',
+        href: stockMovementRoutes.index(),
+        icon: PackageSearch,    
+    }
 ];
 
 const footerNavItems: NavItem[] = [

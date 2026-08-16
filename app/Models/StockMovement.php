@@ -20,4 +20,9 @@ use Illuminate\Support\Carbon;
 class StockMovement extends Model
 {
     const UPDATED_AT = null;
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

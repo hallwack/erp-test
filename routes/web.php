@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\StockMovementController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
@@ -28,6 +29,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('product', ProductController::class);
 
     Route::resource('order', OrderController::class)->only(['index', 'show']);
+
+    Route::get('stock-movement', [StockMovementController::class, 'index'])->name('stock-movement.index');
 });
 
 require __DIR__.'/settings.php';
